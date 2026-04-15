@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Мой город{% endblock %}</title>
+    <style>
+        body {
+            background-color: {{ settings.bg_color }};
+            color: {{ settings.font_color }};
+            font-size: {{ settings.font_size }};
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        nav a { margin-right: 15px; text-decoration: none; color: #0066cc; }
+        nav a:hover { text-decoration: underline; }
+        hr { margin: 20px 0; }
+        .content { margin-top: 20px; }
+        .flash { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .danger { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Главная</a> |
+        <a href="/news/">Новости города</a> |
+        <a href="/management/">Руководство</a> |
+        <a href="/facts/">Факты</a> |
+        <a href="/contacts/">Контакты</a> |
+        <a href="/history">История</a> |
+        {% if current_user.is_authenticated %}
+            <span>Привет, {{ current_user.username }}!</span>
+            <a href="{{ url_for('logout') }}">Выход</a>
+            {% if current_user.is_admin %}
+                <a href="{{ url_for('admin.dashboard') }}">Админка</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('login') }}">Вход</a>
+            <a href="{{ url_for('register') }}">Регистрация</a>
+        {% endif %}
+    </nav>
+    <hr>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

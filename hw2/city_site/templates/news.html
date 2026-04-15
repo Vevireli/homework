@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Новости города{% endblock %}
+{% block content %}
+<h1>Новости города</h1>
+{% if articles %}
+    {% for article in articles %}
+        <div style="border-bottom: 1px solid #ccc; margin-bottom: 15px;">
+            <h2><a href="{{ url_for('news_detail', article_id=article.id) }}">{{ article.title }}</a></h2>
+            <p>{{ article.content[:200] }}...</p>
+            <small>Опубликовано: {{ article.created_at.strftime('%d.%m.%Y') }} | Просмотров: {{ article.views }} | Сохранений: {{ article.saves }}</small>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Пока нет новостей. Зайдите позже.</p>
+{% endif %}
+{% endblock %}

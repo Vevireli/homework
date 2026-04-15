@@ -1,0 +1,15 @@
+...
+{% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ 'Да' if user.is_admin else 'Нет' }}</td>
+        <td>{{ 'Да' if user.is_banned else 'Нет' }} ({{ user.get_ban_duration_display() }})</td>
+        <td>
+            <a href="{{ url_for('admin.ban_user', user_id=user.id) }}">Забанить</a> |
+            <a href="{{ url_for('admin.delete_user', user_id=user.id) }}" onclick="return confirm('Удалить?')">Удалить</a>
+        </td>
+    </tr>
+{% endfor %}
+...

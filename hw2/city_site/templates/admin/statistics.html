@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Статистика{% endblock %}
+{% block content %}
+<h1>Статистика</h1>
+
+<h2>Топ-10 статей по просмотрам</h2>
+<ol>
+{% for article in top_views %}
+    <li>{{ article.title }} ({{ article.views }} просмотров)</li>
+{% endfor %}
+</ol>
+
+<h2>Топ-10 статей по количеству комментариев</h2>
+<ol>
+{% for article, cnt in top_comments %}
+    <li>{{ article.title }} ({{ cnt }} комментариев)</li>
+{% endfor %}
+</ol>
+
+<h2>Топ-10 статей по сохранениям</h2>
+<ol>
+{% for article in top_saves %}
+    <li>{{ article.title }} ({{ article.saves }} сохранений)</li>
+{% endfor %}
+</ol>
+{% endblock %}

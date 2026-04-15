@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+<h1>{{ article.title }}</h1>
+<p>{{ article.content }}</p>
+<small>Автор: {{ article.author.username }} | Опубликовано: {{ article.created_at.strftime('%d.%m.%Y') }} | Просмотров: {{ article.views }} | Сохранений: {{ article.saves }}</small>
+<p><a href="{{ url_for('save_article', article_id=article.id) }}">Сохранить для дальнейшего прочтения</a></p>
+
+<hr>
+<h3>Комментарии ({{ comments|length }})</h3>
+{% if current_user.is_authenticated and current_user.is_active() %}
+    <form method="post" action="{{ url_for('add_comment', article_id=article.id) }}">
+        {{ form.hidden_tag() }}
+        <p>{{ form.text(rows=3, cols=50) }}</p>
+        <p><input type="submit" value="Добавить комментарий"></p>
+    </form>
+{% elif not current_user.is_authenticated %}
+    <p><a href="{{ url_for('login') }}">Войдите</a>, чтобы оставить комментарий.</p>
+{% elif not current_user.is_active() %}
+    <p>Вы забанены и не можете комментировать.</p>
+{% endif %}
+
+{% for comment in comments %}
+    <div style="border-left: 2px solid #ccc; padding-left: 10px; margin: 10px 0;">
+        <strong>{{ comment.user.username }}</strong> <small>{{ comment.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+        <p>{{ comment.text }}</p>
+    </div>
+{% endfor %}
+{% endblock %}
